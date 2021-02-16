@@ -316,12 +316,12 @@ void AxisG1_SeqShow(struct seq_file *s, struct DmaDevice *dev) {
    struct AxisG1Reg *reg;
    reg = (struct AxisG1Reg *)dev->reg;
 
-   seq_printf(s,"\n");
-   seq_printf(s,"-------------- General HW -----------------\n");
-   seq_printf(s,"             Writable : %i\n",((ioread32(&(reg->fifoValid)) >> 1) & 0x1));
-   seq_printf(s,"             Readable : %i\n",(ioread32(&(reg->fifoValid)) & 0x1));
-   seq_printf(s,"     Write Int Status : %i\n",((ioread32(&(reg->intPendAck)) >> 1) & 0x1));
-   seq_printf(s,"      Read Int Status : %i\n",(ioread32(&(reg->intPendAck)) & 0x1));
-   seq_printf(s,"        Cache Setting : 0x%x\n",(ioread32(&(reg->swCache))));
+//   seq_printf(s,"\n");
+//   seq_printf(s,"-------------- General HW -----------------\n");
+//   seq_printf(s,"             Writable : %i\n",((ioread32(&(reg->fifoValid)) >> 1) & 0x1));
+//   seq_printf(s,"             Readable : %i\n",(ioread32(&(reg->fifoValid)) & 0x1));
+//   seq_printf(s,"     Write Int Status : %i\n",((ioread32(&(reg->intPendAck)) >> 1) & 0x1));
+//   seq_printf(s,"      Read Int Status : %i\n",(ioread32(&(reg->intPendAck)) & 0x1));
+//   seq_printf(s,"        Cache Setting : 0x%x\n",(ioread32(&(reg->swCache))));
 }
 

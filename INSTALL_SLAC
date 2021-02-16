@@ -1,0 +1,13 @@
+Simple instruction to compile the aes driver in slac rddev111 machine and install it to ZCU102
+
+
+git clone https://github.com/zixu/aes-stream-drivers.git
+
+
+cd aes-stream-drivers/rce_stream/driver
+
+
+make COMP=/opt/rce/package/x86_64/cross-arm64-gcc7/7.3/bin/aarch64-unknown-linux-gnu- KDIR=/opt/rce/package/aarch64/xilinx_kernel/4.14.0/build/ ARCH=arm64
+
+
+Then copy ./rcestream.ko over to the RCE. 

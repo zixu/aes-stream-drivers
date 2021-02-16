@@ -1,3 +1,5 @@
+This is only a temporary solution for monitoring the software Buff of aes driver. In order for YARR SW can monitor the software buff size, need to check /proc/axiXXXXX file frequently. So, just reduce and re-organize the information of /proc/axiXXXX file
+
 # aes-stream-drivers
 
 Common repository for streaming kernel drivers (PGP, AxiStream, ExoTem)

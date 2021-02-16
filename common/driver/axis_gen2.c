@@ -552,7 +552,7 @@ void AxisG2_SeqShow(struct seq_file *s, struct DmaDevice *dev) {
    reg = (struct AxisG2Reg *)dev->reg;
    hwData = (struct AxisG2Data *)dev->hwData;
 
-   seq_printf(s,"\n");
+/*   seq_printf(s,"\n");
    seq_printf(s,"-------------- General HW -----------------\n");
    seq_printf(s,"          Int Req Count : %u\n",(ioread32(&(reg->intReqCount))));
    seq_printf(s,"        Hw Dma Wr Index : %u\n",(ioread32(&(reg->hwWrIndex))));
@@ -571,7 +571,7 @@ void AxisG2_SeqShow(struct seq_file *s, struct DmaDevice *dev) {
    seq_printf(s,"      Driver Load Count : %u\n",((ioread32(&(reg->enableVer)))>>8)&0xFF);
    seq_printf(s,"               IRQ Hold : %u\n",(ioread32(&(reg->irqHoldOff))));
    seq_printf(s,"              BG Enable : 0x%x\n",hwData->bgEnable);
-
+*/
    for ( x=0; x < 8; x++ ) {
       if ( (hwData->bgEnable >> x) & 0x1 ) {
          seq_printf(s,"         BG %i Threshold : %u\n",x,ioread32(&(reg->bgThold[x])));
