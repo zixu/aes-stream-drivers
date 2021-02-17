@@ -1,7 +1,7 @@
 Simple instruction to compile the aes driver in slac rddev111 machine and install it to ZCU102
 
 
-git clone https://github.com/zixu/aes-stream-drivers.git
+git clone --branch master_v5p14p3_reduced_ProcInfo_for_fastMonitoring https://github.com/zixu/aes-stream-drivers.git
 
 
 cd aes-stream-drivers/rce_stream/driver
