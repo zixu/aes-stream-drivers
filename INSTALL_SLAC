@@ -10,4 +10,9 @@ cd aes-stream-drivers/rce_stream/driver
 make COMP=/opt/rce/package/x86_64/cross-arm64-gcc7/7.3/bin/aarch64-unknown-linux-gnu- KDIR=/opt/rce/package/aarch64/xilinx_kernel/4.14.0/build/ ARCH=arm64
 
 
-Then copy ./rcestream.ko over to the RCE. 
+copy ./rcestream.ko over to the RCE. 
+
+cd ../../../
+
+copy aes-stream-drivers/scripts/rce_driver.sh to RCE /bin/ folder
+
