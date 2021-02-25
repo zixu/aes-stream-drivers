@@ -600,7 +600,6 @@ ssize_t Dma_Ioctl(struct file *filp, uint32_t cmd, unsigned long arg) {
 			 buff = dmaGetBufferList(&(dev->txBuffers),x);
 			 if ( (!buff->inHw) &&  buff->inQ   ) qCnt++;
 		 }
-		 qCnt    = 100;
 		 return(qCnt);
 		 break;
 
