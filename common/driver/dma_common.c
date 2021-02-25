@@ -569,6 +569,7 @@ ssize_t Dma_Ioctl(struct file *filp, uint32_t cmd, unsigned long arg) {
    uint32_t   x;
    uint32_t   cnt;
    uint32_t   bCnt;
+   uint32_t	  qCnt;
    uint32_t * indexes;
 
    desc = (struct DmaDesc *)filp->private_data;
@@ -591,6 +592,19 @@ ssize_t Dma_Ioctl(struct file *filp, uint32_t cmd, unsigned long arg) {
       case DMA_Get_TxBuff_Count:
          return(dev->txBuffers.count);
          break;
+
+	  case DMA_Get_TxBuffinSWQ_Count:
+		 //zixu work on this
+		 qCnt    = 0;
+		 for (x=dev->txBuffers.baseIdx; x < (dev->txBuffers.baseIdx + dev->txBuffers.count); x++) {
+			 buff = dmaGetBufferList(&(dev->txBuffers),x);
+			 if ( (!buff->inHw) &&  buff->inQ   ) qCnt++;
+		 }
+		 qCnt    = 100;
+		 return(qCnt);
+		 break;
+
+
 
       // Get buffer size, same size for rx and tx
       case DMA_Get_Buff_Size:
@@ -1002,14 +1016,14 @@ void Dma_SeqStop(struct seq_file *s, void *v) {
 int Dma_SeqShow(struct seq_file *s, void *v) {
    struct   DmaBuffer * buff;
    struct   DmaDevice * dev;
-   uint32_t max;
-   uint32_t min;
-   uint32_t sum;
-   uint32_t avg;
-   uint32_t miss;
-   uint32_t userCnt;
-   uint32_t hwCnt;
-   uint32_t hwQCnt;
+   //uint32_t max;
+   //uint32_t min;
+   //uint32_t sum;
+   //uint32_t avg;
+   //uint32_t miss;
+   //uint32_t userCnt;
+   //uint32_t hwCnt;
+   //uint32_t hwQCnt;
    uint32_t qCnt;
    uint32_t x;
 
@@ -1019,94 +1033,46 @@ int Dma_SeqShow(struct seq_file *s, void *v) {
    dev->hwFunc->seqShow(s,dev);
 
 //   seq_printf(s,"\n");
-//   seq_printf(s,"-------------- General --------------------\n");
-//   seq_printf(s,"          Dma Version : 0x%x\n",DMA_VERSION);
-//   seq_printf(s,"          Git Version : " GITV "\n\n");
-//   seq_printf(s,"-------------- Read Buffers ---------------\n");
-//   seq_printf(s,"         Buffer Count : %u\n",dev->rxBuffers.count);
-//   seq_printf(s,"          Buffer Size : %u\n",dev->cfgSize);
-//   seq_printf(s,"          Buffer Mode : %u\n",dev->cfgMode);
-
-   userCnt = 0;
-   hwCnt   = 0;
-   hwQCnt   = 0;
-   qCnt    = 0;
-   miss    = 0;
-   max     = 0;
-   min     = 0xFFFFFFFF;
-   sum     = 0;
-
-   for (x=dev->rxBuffers.baseIdx; x < (dev->rxBuffers.baseIdx + dev->rxBuffers.count); x++) {
-      buff = dmaGetBufferList(&(dev->rxBuffers),x);
-
-      if ( buff->count > max ) max = buff->count;
-      if ( buff->count < min ) min = buff->count;
-      if ( buff->userHas ) userCnt++;
-      if (  buff->inHw   && (!buff->inQ) ) hwCnt++;
-      if (  buff->inHw   &&  buff->inQ   ) hwQCnt++;
-      if ( (!buff->inHw) &&  buff->inQ   ) qCnt++;
-
-      if ( buff->userHas == NULL && buff->inHw == 0 && buff->inQ == 0 ) miss++;
-
-      sum += buff->count;
-   }
-   if (dev->rxBuffers.count == 0) {
-      min = 0;
-      avg = 0;
-   }
-   else avg = sum/dev->rxBuffers.count;
-
-//   seq_printf(s,"      Buffers In User : %u\n",userCnt);
-//   seq_printf(s,"        Buffers In Hw : %u\n",hwCnt);
-//   seq_printf(s,"  Buffers In Pre-Hw Q : %u\n",hwQCnt);
-//   seq_printf(s,"  Buffers In Rx Queue : %u\n",qCnt);
-//   seq_printf(s,"      Missing Buffers : %u\n",miss);
-//   seq_printf(s,"       Min Buffer Use : %u\n",min);
-//   seq_printf(s,"       Max Buffer Use : %u\n",max);
-//   seq_printf(s,"       Avg Buffer Use : %u\n",avg);
-//   seq_printf(s,"       Tot Buffer Use : %u\n",sum);
-
-//   seq_printf(s,"\n");
 //   seq_printf(s,"-------------- Write Buffers ---------------\n");
 //   seq_printf(s,"         Buffer Count : %u\n",dev->txBuffers.count);
 //   seq_printf(s,"          Buffer Size : %u\n",dev->cfgSize);
 //   seq_printf(s,"          Buffer Mode : %u\n",dev->cfgMode);
 
-   userCnt = 0;
-   hwCnt   = 0;
-   hwQCnt  = 0;
+//   userCnt = 0;
+//   hwCnt   = 0;
+//   hwQCnt  = 0;
    qCnt    = 0;
-   miss    = 0;
-   max     = 0;
-   min     = 0xFFFFFFFF;
-   sum     = 0;
+   //miss    = 0;
+   //max     = 0;
+   //min     = 0xFFFFFFFF;
+   //sum     = 0;
 
    for (x=dev->txBuffers.baseIdx; x < (dev->txBuffers.baseIdx + dev->txBuffers.count); x++) {
       buff = dmaGetBufferList(&(dev->txBuffers),x);
 
-      if ( buff->count > max ) max = buff->count;
-      if ( buff->count < min ) min = buff->count;
-      if ( buff->userHas ) userCnt++;
-      if (  buff->inHw   && (!buff->inQ) ) hwCnt++;
-      if (  buff->inHw   &&  buff->inQ   ) hwQCnt++;
+//      if ( buff->count > max ) max = buff->count;
+//      if ( buff->count < min ) min = buff->count;
+//      if ( buff->userHas ) userCnt++;
+//      if (  buff->inHw   && (!buff->inQ) ) hwCnt++;
+//      if (  buff->inHw   &&  buff->inQ   ) hwQCnt++;
       if ( (!buff->inHw) &&  buff->inQ   ) qCnt++;
 
-      if ( buff->userHas == NULL && buff->inHw == 0 && buff->inQ == 0 ) miss++;
+//      if ( buff->userHas == NULL && buff->inHw == 0 && buff->inQ == 0 ) miss++;
 
-      sum += buff->count;
+      //sum += buff->count;
    }
-   if (dev->txBuffers.count == 0) {
-      min = 0;
-      avg = 0;
-   }
-   else avg = sum/dev->txBuffers.count;
+//   if (dev->txBuffers.count == 0) {
+////      min = 0;
+////      avg = 0;
+//   }
+//   else avg = sum/dev->txBuffers.count;
 
    seq_printf(s,"%u\n",qCnt);
-   seq_printf(s,"      Buffers In User : %u\n",userCnt);
-   seq_printf(s,"        Buffers In Hw : %u\n",hwCnt);
-   seq_printf(s,"  Buffers In Pre-Hw Q : %u\n",hwQCnt);
-   seq_printf(s,"  Buffers In Sw Queue : %u\n",qCnt);
-   seq_printf(s,"      Missing Buffers : %u\n",miss);
+//   seq_printf(s,"      Buffers In User : %u\n",userCnt);
+//   seq_printf(s,"        Buffers In Hw : %u\n",hwCnt);
+//   seq_printf(s,"  Buffers In Pre-Hw Q : %u\n",hwQCnt);
+//   seq_printf(s,"  Buffers In Sw Queue : %u\n",qCnt);
+//   seq_printf(s,"      Missing Buffers : %u\n",miss);
 //   seq_printf(s,"       Min Buffer Use : %u\n",min);
 //   seq_printf(s,"       Max Buffer Use : %u\n",max);
 //   seq_printf(s,"       Avg Buffer Use : %u\n",avg);

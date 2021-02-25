@@ -49,6 +49,7 @@
 #define DMA_Read_Register    0x100B
 #define DMA_Get_RxBuff_Count 0x100C
 #define DMA_Get_TxBuff_Count 0x100D
+#define DMA_Get_TxBuffinSWQ_Count 0x100F
 
 // Mask size
 #define DMA_MASK_SIZE 512
@@ -279,6 +280,11 @@ static inline ssize_t dmaGetRxBuffCount(int32_t fd) {
 // get tx buffer count
 static inline ssize_t dmaGetTxBuffCount(int32_t fd) {
    return(ioctl(fd,DMA_Get_TxBuff_Count,0));
+}
+
+// get tx buffer count inQ not inHw
+static inline ssize_t dmaGetTxBuffinSWQCount(int32_t fd) {
+   return(ioctl(fd,DMA_Get_TxBuffinSWQ_Count,0));
 }
 
 // get buffer size
